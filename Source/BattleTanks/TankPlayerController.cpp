@@ -3,10 +3,11 @@
 #include "TankPlayerController.h"
 
 
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto controlledTank = getControlledTank();
+	auto controlledTank = GetControlledTank();
 	if (!controlledTank)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to get controlled Tank."));
@@ -17,7 +18,28 @@ void ATankPlayerController::BeginPlay()
 	}
 }
 
-ATank* ATankPlayerController::getControlledTank() {
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	UE_LOG(LogTemp, Warning, TEXT("Player Controller ticking..."));
+	AimTowardsCrosshair();
+}
+
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (!GetControlledTank()) { return; }
+	FVector hitLocation;
+	if (GetSightRayHitLocation(hitLocation)) {
+		UE_LOG(LogTemp, Warning, TEXT("PlayerController HitLocation: %s"), *hitLocation.ToString());
+	}
+}
+
+bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation) const
+{
+	return true;
+}
+
+ATank* ATankPlayerController::GetControlledTank() {
 	return Cast<ATank>(GetPawn());
 }
 
