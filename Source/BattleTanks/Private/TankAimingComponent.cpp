@@ -1,9 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TankBarrel.h"
 #include "Public/TankAimingComponent.h"
 #include "Kismet/GameplayStaticsTypes.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+#include "TankBarrel.h"
+#include "TankTurret.h"
+
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -52,19 +55,33 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* component)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
-	Barrel = component;
+	if (!BarrelToSet) { return; }
+	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	if (!TurretToSet) { return; }
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::MoveBarrelTowardsAimDirection(FVector AimDirection)
 {
+	auto AimRotation = AimDirection.Rotation();
+
 	// Calculate the difference between the barrel rotation and the aim direction rotation
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
-	auto AimRotation = AimDirection.Rotation();
-	auto DeltaRotation =  AimRotation - BarrelRotation;
+	auto BarrelDeltaRotation =  AimRotation - BarrelRotation;
 
-	UE_LOG(LogTemp, Warning, TEXT("DeltaRotation Set at: %s"), *(DeltaRotation.ToString()));
+	UE_LOG(LogTemp, Warning, TEXT("BarrelDeltaRotation Set at: %s"), *(BarrelDeltaRotation.ToString()));
 
-	Barrel->Elevate(DeltaRotation.Pitch);
+	Barrel->Elevate(BarrelDeltaRotation.Pitch);
+
+	// Calculate the difference between the Turret rotation and the aim direction rotation
+	auto TurretRotation = Turret->GetForwardVector().Rotation();
+	auto TurretDeltaRotation = AimRotation - TurretRotation;
+
+	Turret->Rotate(TurretDeltaRotation.Yaw);
 }
