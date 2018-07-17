@@ -44,12 +44,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		return;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("%f: Tank aim solution found."), Time);
 	auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 	
 	auto TankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetComponentLocation().ToString();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s with speed: %f"), *TankName, *(AimDirection.ToString()), *BarrelLocation, LaunchSpeed);
+	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s from %s with speed: %f"), *TankName, *(AimDirection.ToString()), *BarrelLocation, LaunchSpeed);
 
 	MoveBarrelTowardsAimDirection(AimDirection);
 
@@ -74,8 +73,6 @@ void UTankAimingComponent::MoveBarrelTowardsAimDirection(FVector AimDirection)
 	// Calculate the difference between the barrel rotation and the aim direction rotation
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto BarrelDeltaRotation =  AimRotation - BarrelRotation;
-
-	UE_LOG(LogTemp, Warning, TEXT("BarrelDeltaRotation Set at: %s"), *(BarrelDeltaRotation.ToString()));
 
 	Barrel->Elevate(BarrelDeltaRotation.Pitch);
 
