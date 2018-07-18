@@ -21,10 +21,12 @@ public:
 	void IntendMoveForward(float SpeedValue);
 
 	UFUNCTION(BlueprintCallable, Category = Movement)
-	void IntendMoveBackwards(float SpeedVale);
+	void IntendMoveLateral(float SpeedValue);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void initialise(UTankTrack* LeftTankTrackToSet, UTankTrack* RightTankTrackToSet);
+
+	void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 	
 private:
 	UTankTrack * LeftTankTrack = nullptr;

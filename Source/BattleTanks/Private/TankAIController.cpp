@@ -20,6 +20,8 @@ void ATankAIController::Tick(float DeltaTime)
 		UE_LOG(LogTemp, Error, TEXT("Failed to get Player Controlled Tank."));
 		return;
 	}
+
+	MoveToActor(playerControlledTank, AcceptanceRadius);
 	
 	controlledTank->AimAt(playerControlledTank->GetActorLocation());
 

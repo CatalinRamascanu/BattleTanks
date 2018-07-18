@@ -20,4 +20,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	float AcceptanceRadius = 3000; // Radius that the AI think is optimal to shoot the player
 };
